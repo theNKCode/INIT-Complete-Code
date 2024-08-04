@@ -4,6 +4,73 @@ import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
 import { sendToken } from "../utils/jwtToken.js";
 
+// export const register = catchAsyncErrors(async (req, res, next) => {
+//   try {
+//     const {
+//       name,
+//       email,
+//       phone,
+//       address,
+//       password,
+//       role,
+//       firstNiche,
+//       secondNiche,
+//       thirdNiche,
+//       coverLetter,
+//     } = req.body;
+
+//     if (!name || !email || !phone || !address || !password || !role) {
+//       return next(new ErrorHandler("All fields are required.", 400));
+//     }
+//     if (role === "Job Seeker" && (!firstNiche || !secondNiche || !thirdNiche)) {
+//       return next(new ErrorHandler("Please provide your preferred job niches.", 400));
+//     }
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return next(new ErrorHandler("Email is already registered.", 400));
+//     }
+//     const userData = {
+//       name,
+//       email,
+//       phone,
+//       address,
+//       password,
+//       role,
+//       niches: {
+//         firstNiche,
+//         secondNiche,
+//         thirdNiche,
+//       },
+//       coverLetter,
+//       isApproved: false, // Default to false
+//     };
+//     if (req.files && req.files.resume) {
+//       const { resume } = req.files;
+//       if (resume) {
+//         try {
+//           const cloudinaryResponse = await cloudinary.uploader.upload(
+//             resume.tempFilePath,
+//             { folder: "Job_Seekers_Resume" }
+//           );
+//           if (!cloudinaryResponse || cloudinaryResponse.error) {
+//             return next(new ErrorHandler("Failed to upload resume to cloud.", 500));
+//           }
+//           userData.resume = {
+//             public_id: cloudinaryResponse.public_id,
+//             url: cloudinaryResponse.secure_url,
+//           };
+//         } catch (error) {
+//           return next(new ErrorHandler("Failed to upload resume", 500));
+//         }
+//       }
+//     }
+//     const user = await User.create(userData);
+//     sendToken(user, 201, res, "Registration request submitted. Awaiting admin approval.");
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 export const register = catchAsyncErrors(async (req, res, next) => {
   try {
     const {
@@ -20,17 +87,20 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     } = req.body;
 
     if (!name || !email || !phone || !address || !password || !role) {
-      return next(new ErrorHandler("All fileds are required.", 400));
+      return next(new ErrorHandler("All fields are required.", 400));
     }
+
     if (role === "Job Seeker" && (!firstNiche || !secondNiche || !thirdNiche)) {
       return next(
         new ErrorHandler("Please provide your preferred job niches.", 400)
-      );
+    );
     }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return next(new ErrorHandler("Email is already registered.", 400));
     }
+
     const userData = {
       name,
       email,
@@ -44,7 +114,9 @@ export const register = catchAsyncErrors(async (req, res, next) => {
         thirdNiche,
       },
       coverLetter,
+      isApproved: role === "Employer" ? false : true, // Only Employers need approval
     };
+
     if (req.files && req.files.resume) {
       const { resume } = req.files;
       if (resume) {
@@ -67,12 +139,18 @@ export const register = catchAsyncErrors(async (req, res, next) => {
         }
       }
     }
+
     const user = await User.create(userData);
-    sendToken(user, 201, res, "User Registered.");
+    if (role === "Employer") {
+      sendToken(user, 201, res, "Registration request submitted. Awaiting admin approval.");
+    } else {
+      sendToken(user, 201, res, "Registration successful.");
+    }
   } catch (error) {
     next(error);
   }
 });
+
 
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { role, email, password } = req.body;
@@ -92,7 +170,22 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   if (user.role !== role) {
     return next(new ErrorHandler("Invalid user role.", 400));
   }
+  if (!user.isApproved) {
+    return next(new ErrorHandler("Your account is pending approval by the admin.", 400));
+  }
   sendToken(user, 200, res, "User logged in successfully.");
+});
+
+export const approveUser = catchAsyncErrors(async (req, res, next) => {
+  const { userId, approve } = req.body; // `approve` is a boolean indicating whether to approve or reject
+
+  const user = await User.findById(userId);
+  if (!user) return next(new ErrorHandler("User not found.", 404));
+
+  user.isApproved = approve;
+  await user.save();
+
+  res.status(200).json({ success: true, message: approve ? 'User approved.' : 'User rejected.' });
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
@@ -186,4 +279,18 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   user.password = req.body.newPassword;
   await user.save();
   sendToken(user, 200, res, "Password updated successfully.");
+});
+
+// New method to get all users
+export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
+  // Check if the user is an admin
+  if (req.user.role !== 'admin') {
+    return next(new ErrorHandler("Access denied. Admins only.", 403));
+  }
+
+  const users = await User.find(); // Fetch all users
+  res.status(200).json({
+    success: true,
+    users,
+  });
 });
