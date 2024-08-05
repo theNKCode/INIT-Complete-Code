@@ -14,6 +14,9 @@ import {register } from "./controllers/userController.js"
 import postRoutes from "./routes/posts.js";
 import { createPost } from "./controllers/posts.js";
 import { isAuthenticated, isAuthorized } from "./middlewares/auth.js";
+import { User } from "./models/userSchema.js";
+import { users, posts } from "./data/index.js";
+import ErrorHandler from "./middlewares/error.js";
 
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
@@ -123,10 +126,8 @@ app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
 
 app.all("*", (req, res, next) => {
-  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));
+  next(new ErrorHandler(`Can't find ${req.originalUrl} on this server!`, 404));
 });
-
-// app.use(globalErrorHandler);
 
 newsLetterCron()
 connection();
