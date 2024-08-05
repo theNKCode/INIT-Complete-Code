@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import "./App.css";
 // import './index.css'; // Adjust the path if necessary
 
@@ -25,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  }, );
 
   return (
     <>

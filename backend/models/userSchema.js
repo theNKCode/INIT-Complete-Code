@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,6 +16,38 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: [validator.isEmail, "Please provide valid email."],
   },
+  picturePath: {
+    type: String,
+    default: "",
+  },
+  companies: {
+    type: [String],
+    maxlength: 50,
+    validate: {
+      validator: (value) => value.length <= 50,
+      message: "Companies field cannot have more than 50 elements.",
+    },
+  },
+  location: {
+    type: String,
+    max: 50,
+  },
+  occupation: {
+    type: String,
+    max: 50,
+  },
+  viewedProfile: {
+    type: [Number],
+    default: [], 
+    // type: Array,
+    // default: [],
+  },
+  impressions: {
+    type: [Number],
+    default: [],
+    // type: Array,
+    // default: [],
+  },
   phone: {
     type: Number,
     required: true,
@@ -24,9 +57,15 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   niches: {
-    firstNiche: String,
-    secondNiche: String,
-    thirdNiche: String,
+    firstNiche: {
+      type: String,
+    },
+    secondNiche: {
+      type: String,
+    },
+    thirdNiche: {
+      type: String,
+    },
   },
   password: {
     type: String,
@@ -53,13 +92,20 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+},
+{ timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    next();
+    return next();
   }
   this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

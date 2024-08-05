@@ -22,7 +22,7 @@
 //   const main = palette.neutral.main;
 
 //   const getUser = async () => {
-//     const response = await fetch(`http://localhost:3001/users/${userId}`, {
+//     const response = await fetch(`http://localhost:4001/users/${userId}`, {
 //       method: "GET",
 //       headers: { Authorization: `Bearer ${token}` },
 //     });
@@ -150,10 +150,6 @@
 
 // export default UserWidget;
 
-
-
-
-
 import {
   ManageAccountsOutlined,
   EditOutlined,
@@ -178,10 +174,13 @@ const UserWidget = ({ userId }) => {
   const main = palette.neutral.main;
 
   const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(
+      `http://localhost:4001/api/v1/user/getUser/${userId}`,
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     const data = await response.json();
     setUser(data);
   };
@@ -214,7 +213,8 @@ const UserWidget = ({ userId }) => {
         onClick={() => navigate(`/profile/${userId}`)}
       >
         <FlexBetween gap="1rem">
-          <UserImage imageUrl={picturePath} size="60px" /> {/* Use picturePath */}
+          <UserImage imageUrl={picturePath} size="60px" />{" "}
+          {/* Use picturePath */}
           <Box>
             <Typography
               variant="h4"

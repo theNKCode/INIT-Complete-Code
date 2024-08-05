@@ -9,6 +9,7 @@ import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
 import Home from "pages/Home";
 
+
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { userId } = useParams();
@@ -16,7 +17,7 @@ const ProfilePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
   const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+    const response = await fetch(`http://localhost:4001/users/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -33,9 +34,12 @@ const ProfilePage = () => {
   return (
     <Box>
       <Navbar />
-      <div className="profilehome" style={{ margin: '0 auto', padding: '0 20px' }}>
-  <Home />
-</div>
+      <div
+        className="profilehome"
+        style={{ margin: "0 auto", padding: "0 20px" }}
+      >
+        <Home />
+      </div>
 
       <Box
         width="100%"
@@ -56,12 +60,9 @@ const ProfilePage = () => {
           <MyPostWidget picturePath={user.picturePath} />
           <Box m="2rem 0" />
           <PostsWidget userId={userId} isProfile />
-            
         </Box>
       </Box>
     </Box>
-
-    
   );
 };
 

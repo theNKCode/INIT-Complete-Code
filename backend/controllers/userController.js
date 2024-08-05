@@ -2,7 +2,11 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { sendToken } from "../utils/jwtToken.js";
+// import cloudinary from '../config/cloudinary.js';
+// import jwt from 'jsonwebtoken'
 
 // export const register = catchAsyncErrors(async (req, res, next) => {
 //   try {
@@ -84,6 +88,10 @@ export const register = catchAsyncErrors(async (req, res, next) => {
       secondNiche,
       thirdNiche,
       coverLetter,
+      picturepath,
+      companies,
+      location,
+      occupation
     } = req.body;
 
     if (!name || !email || !phone || !address || !password || !role) {
@@ -100,6 +108,7 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     if (existingUser) {
       return next(new ErrorHandler("Email is already registered.", 400));
     }
+  
 
     const userData = {
       name,
@@ -114,7 +123,16 @@ export const register = catchAsyncErrors(async (req, res, next) => {
         thirdNiche,
       },
       coverLetter,
+      picturepath,
+      coverPicturePath,
       isApproved: role === "Employer" ? false : true, // Only Employers need approval
+      companies,
+      location,
+      occupation,
+      viewedProfile: [],
+      impressions: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
 
     if (req.files && req.files.resume) {
@@ -151,7 +169,6 @@ export const register = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { role, email, password } = req.body;
   if (!role || !email || !password) {
@@ -176,16 +193,28 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res, "User logged in successfully.");
 });
 
-export const approveUser = catchAsyncErrors(async (req, res, next) => {
-  const { userId, approve } = req.body; // `approve` is a boolean indicating whether to approve or reject
+// export const approveUser = catchAsyncErrors(async (req, res, next) => {
+//   const { userId, approve } = req.body; // `approve` is a boolean indicating whether to approve or reject
 
+//   const user = await User.findById(userId);
+//   if (!user) return next(new ErrorHandler("User not found.", 404));
+
+//   user.isApproved = approve;
+//   await user.save();
+
+//   res.status(200).json({ success: true, message: approve ? 'User approved.' : 'User rejected.' });
+// });
+
+export const approveUser = catchAsyncErrors(async (req, res, next) => {
+  const { userId, approve } = req.body;
   const user = await User.findById(userId);
   if (!user) return next(new ErrorHandler("User not found.", 404));
 
   user.isApproved = approve;
   await user.save();
 
-  res.status(200).json({ success: true, message: approve ? 'User approved.' : 'User rejected.' });
+  const message = approve ? 'User approved.' : 'User rejected.';
+  res.status(200).json({ success: true, message });
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
@@ -202,12 +231,20 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getUser = catchAsyncErrors(async (req, res, next) => {
-  const user = req.user;
-  res.status(200).json({
-    success: true,
-    user,
-  });
+  try{
+    const {id} = req.params;
+    const user = await User.findById(id);
+    res.status(200).json(user);
+  }catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+  // const user = req.user; // Assuming req.user contains the user details
+  // res.status(200).json({
+  //   success: true,
+  //   user,
+  // });
 });
+
 
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
@@ -294,3 +331,81 @@ export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
     users,
   });
 });
+
+export const getUserCompanies = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    const companies = await Promise.all(
+      user.companies.map((id) => User.findById(id))
+    );
+    const formattedCompanies = companies.map(
+      ({ _id, name, occupation, location, picturePath }) => {
+        return { _id, name, occupation, location, picturePath };
+      }
+    );
+    res.status(200).json(formattedCompanies);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+/* UPDATE */
+export const updateUserPhoto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { file } = req;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: "user_photos",
+    });
+
+    // Save the Cloudinary URL to the user's profile
+    const user = await User.findByIdAndUpdate(
+      id,
+      { picturePath: result.secure_url },
+      { new: true }
+    );
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const addRemoveCompany = async (req, res) => {
+  try {
+    const { id, companyId } = req.params;
+    const user = await User.findById(id);
+    const company = await User.findById(companyId);
+
+    if (user.companies.includes(companyId)) {
+      user.companies = user.companies.filter((id) => id !== companyId);
+      company.companies = company.companies.filter((id) => id !== id);
+    } else {
+      user.companies.push(companyId);
+      company.companies.push(id);
+    }
+    await user.save();
+    await company.save();
+
+    const companies = await Promise.all(
+      user.companies.map((id) => User.findById(id))
+    );
+    const formattedcompanies = companies.map(
+      ({ _id, name, occupation, location, picturePath }) => {
+        return { _id, name, occupation, location, picturePath };
+      }
+    );
+
+    res.status(200).json(formattedcompanies);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};

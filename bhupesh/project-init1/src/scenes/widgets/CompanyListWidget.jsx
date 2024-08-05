@@ -13,7 +13,7 @@ const CompanyListWidget = ({ userId }) => {
 
   const getCompanies = async () => {
     const response = await fetch(
-      `http://localhost:3001/users/${userId}/companies`,
+      `http://localhost:4001/users/${userId}/companies`,
       {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },

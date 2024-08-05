@@ -23,7 +23,7 @@ const Company = ({ companyId, name, subtitle, userPicturePath }) => {
 
   const patchCompany = async () => {
     const response = await fetch(
-      `http://localhost:3001/users/${_id}/${companyId}`,
+      `http://localhost:4001/users/${_id}/${companyId}`,
       {
         method: "PATCH",
         headers: {

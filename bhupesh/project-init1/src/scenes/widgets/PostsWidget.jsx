@@ -9,7 +9,7 @@
 //   const token = useSelector((state) => state.token);
 
 //   const getPosts = async () => {
-//     const response = await fetch("http://localhost:3001/posts", {
+//     const response = await fetch("http://localhost:4001/posts", {
 //       method: "GET",
 //       headers: { Authorization: `Bearer ${token}` },
 //     });
@@ -19,7 +19,7 @@
 
 //   const getUserPosts = async () => {
 //     const response = await fetch(
-//       `http://localhost:3001/posts/${userId}/posts`,
+//       `http://localhost:4001/posts/${userId}/posts`,
 //       {
 //         method: "GET",
 //         headers: { Authorization: `Bearer ${token}` },
@@ -72,8 +72,6 @@
 
 // export default PostsWidget;
 
-
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state";
@@ -87,7 +85,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   const getPosts = async () => {
     try {
-      const response = await fetch("http://localhost:3001/posts", {
+      const response = await fetch("http://localhost:4001/posts", {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -104,7 +102,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const getUserPosts = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/posts/${userId}/posts`,
+        `http://localhost:4001/posts/${userId}/posts`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },

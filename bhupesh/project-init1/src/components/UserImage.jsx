@@ -8,16 +8,13 @@
 //         width={size}
 //         height={size}
 //         alt="user"
-//         src={`http://localhost:3001/assets/${image}`}
+//         src={`http://localhost:4001/assets/${image}`}
 //       />
 //     </Box>
 //   );
 // };
 
 // export default UserImage;
-
-
-
 
 import { Box } from "@mui/material";
 
