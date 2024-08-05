@@ -95,8 +95,6 @@ export const register = catchAsyncErrors(async (req, res, next) => {
       occupation
     } = req.body;
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
     
     if (!name || !email || !phone || !address || !password || !role) {
       return next(new ErrorHandler("All fields are required.", 400));
@@ -116,7 +114,7 @@ export const register = catchAsyncErrors(async (req, res, next) => {
       email,
       phone,
       address,
-      password: passwordHash, // Use hashed password
+      password, // Use hashed password
       role,
       niches: {
         firstNiche,
@@ -190,7 +188,6 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   if (!user.isApproved) {
     return next(new ErrorHandler("Your account is pending approval by the admin.", 400));
   }
-  delete user.password;
   sendToken(user, 200, res, "User logged in successfully.");
 });
 

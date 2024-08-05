@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: [8, "Password must cantain at least 8 chatacters."],
-    maxLength: [32, "Password cannot exceed 32 characters."],
+    // maxLength: [32, "Password cannot exceed 32 characters."],
     select: false
   },
   picturePath: {
