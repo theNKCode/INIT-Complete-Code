@@ -14,7 +14,16 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    max: 50,
+    unique: true,
     validate: [validator.isEmail, "Please provide valid email."],
+  },
+  password: {
+    type: String,
+    required: true,
+    minLength: [8, "Password must cantain at least 8 chatacters."],
+    maxLength: [32, "Password cannot exceed 32 characters."],
+    select: false
   },
   picturePath: {
     type: String,
@@ -37,24 +46,24 @@ const userSchema = new mongoose.Schema({
     max: 50,
   },
   viewedProfile: {
-    type: [Number],
-    default: [], 
+    type: Number,
+    // default: [], 
     // type: Array,
     // default: [],
   },
   impressions: {
-    type: [Number],
-    default: [],
+    type: Number,
+    // default: [],
     // type: Array,
     // default: [],
   },
   phone: {
     type: Number,
-    required: true,
+    // required: true,
   },
   address: {
     type: String,
-    required: true,
+    // required: true,
   },
   niches: {
     firstNiche: {
@@ -67,13 +76,7 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   },
-  password: {
-    type: String,
-    required: true,
-    minLength: [8, "Password must cantain at least 8 chatacters."],
-    maxLength: [32, "Password cannot exceed 32 characters."],
-    select: false
-  },
+  
   resume: {
     public_id: String,
     url: String,

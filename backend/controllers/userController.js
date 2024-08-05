@@ -89,33 +89,34 @@ export const register = catchAsyncErrors(async (req, res, next) => {
       thirdNiche,
       coverLetter,
       picturepath,
+      coverPicturePath, // Added this field
       companies,
       location,
       occupation
     } = req.body;
 
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+    
     if (!name || !email || !phone || !address || !password || !role) {
       return next(new ErrorHandler("All fields are required.", 400));
     }
 
     if (role === "Job Seeker" && (!firstNiche || !secondNiche || !thirdNiche)) {
-      return next(
-        new ErrorHandler("Please provide your preferred job niches.", 400)
-    );
+      return next(new ErrorHandler("Please provide your preferred job niches.", 400));
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return next(new ErrorHandler("Email is already registered.", 400));
     }
-  
 
     const userData = {
       name,
       email,
       phone,
       address,
-      password,
+      password: passwordHash, // Use hashed password
       role,
       niches: {
         firstNiche,
@@ -123,14 +124,14 @@ export const register = catchAsyncErrors(async (req, res, next) => {
         thirdNiche,
       },
       coverLetter,
-      picturepath,
-      coverPicturePath,
+      picturePath: picturepath, // Fixed field name
+      coverPicturePath, // Added this field
       isApproved: role === "Employer" ? false : true, // Only Employers need approval
       companies,
       location,
       occupation,
-      viewedProfile: [],
-      impressions: [],
+      viewedProfile: Math.floor(Math.random() * 1000),
+      impressions: Math.floor(Math.random() * 1000),
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -144,9 +145,7 @@ export const register = catchAsyncErrors(async (req, res, next) => {
             { folder: "Job_Seekers_Resume" }
           );
           if (!cloudinaryResponse || cloudinaryResponse.error) {
-            return next(
-              new ErrorHandler("Failed to upload resume to cloud.", 500)
-            );
+            return next(new ErrorHandler("Failed to upload resume to cloud.", 500));
           }
           userData.resume = {
             public_id: cloudinaryResponse.public_id,
@@ -165,6 +164,7 @@ export const register = catchAsyncErrors(async (req, res, next) => {
       sendToken(user, 201, res, "Registration successful.");
     }
   } catch (error) {
+    res.status(500).json({ error: error.message });
     next(error);
   }
 });
@@ -190,6 +190,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   if (!user.isApproved) {
     return next(new ErrorHandler("Your account is pending approval by the admin.", 400));
   }
+  delete user.password;
   sendToken(user, 200, res, "User logged in successfully.");
 });
 
@@ -232,9 +233,13 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 
 export const getUser = catchAsyncErrors(async (req, res, next) => {
   try{
-    const {id} = req.params;
-    const user = await User.findById(id);
-    res.status(200).json(user);
+    // const {id} = req.params;
+    // const user = await User.findById(id);
+    const user = req.user;
+    res.status(200).json({
+    success: true,
+    user,
+  });
   }catch (err) {
     res.status(404).json({ message: err.message });
   }
