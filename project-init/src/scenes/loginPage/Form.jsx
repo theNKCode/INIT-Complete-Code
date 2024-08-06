@@ -79,11 +79,14 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:4001/api/v1/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
+    const loggedInResponse = await fetch(
+      "http://localhost:4001/api/v1/user/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      }
+    );
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn) {
@@ -209,6 +212,16 @@ const Form = () => {
               </>
             )}
 
+            <TextField
+              label="Role"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.role}
+              name="role"
+              error={Boolean(touched.role) && Boolean(errors.role)}
+              helperText={touched.role && errors.role}
+              sx={{ gridColumn: "span 4" }}
+            />
             <TextField
               label="Email"
               onBlur={handleBlur}
