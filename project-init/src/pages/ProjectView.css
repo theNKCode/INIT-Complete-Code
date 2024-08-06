@@ -1,0 +1,67 @@
+/* styles.css */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0 auto;
+  }
+  
+  .wrapper {
+    width: 100%;
+    max-width: 1000px;
+    padding-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .banner-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .section {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .list {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .link {
+    color: #0284c7; /* Sky Blue */
+    text-decoration: none;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0284c7; /* Sky Blue */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #026b9b;
+  }
+  

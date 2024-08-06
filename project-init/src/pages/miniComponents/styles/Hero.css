@@ -1,0 +1,152 @@
+Hero.css
+
+.hero {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .status-indicator {
+    background-color: #22c55e;
+    border-radius: 50%;
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+  
+  .hero-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+  }
+  
+  @media (min-width: 640px) {
+    .hero-title {
+      font-size: 1.75rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: 2.2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-title {
+      font-size: 2.8rem;
+    }
+  }
+  
+  .hero-subtitle {
+    color: #ccc;
+    font-size: 1.3rem;
+    letter-spacing: 15px;
+  }
+  
+  @media (min-width: 640px) {
+    .hero-subtitle {
+      font-size: 1.75rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .hero-subtitle {
+      font-size: 2.2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .hero-subtitle {
+      font-size: 2.8rem;
+    }
+  }
+  
+  .social-links {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background-color: #f1f5f9;
+    border-radius: 1.25rem;
+    margin-top: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .social-links {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .social-links {
+      margin-top: 2.5rem;
+    }
+  }
+  
+  .social-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .youtube {
+    color: #ff0000;
+  }
+  
+  .instagram {
+    color: #c13584;
+  }
+  
+  .facebook {
+    color: #3b5998;
+  }
+  
+  .linkedin {
+    color: #0077b5;
+  }
+  
+  .twitter {
+    color: #1da1f2;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .action-buttons {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .action-buttons {
+      margin-top: 2.5rem;
+    }
+  }
+  
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 1.875rem; /* 30px */
+  }
+  
+  .about-me {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+  }
+  
+  .divider {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+  

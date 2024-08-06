@@ -1,0 +1,164 @@
+.messaging {
+    display: flex;
+  }
+  
+  .messaging__left {
+    flex: 1;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    background-color: white;
+    height: 700px;
+    width: 600px;
+    margin-top: 50px;
+    display: flex;
+  }
+  
+  .messaging__right {
+    margin-top: 50px;
+    flex: 0.4;
+  }
+  
+  .messagingLeftSidebar__left {
+    flex: 0.4;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid lightgray;
+    height: 100%;
+  }
+  
+  .sidebarTop__option {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+    height: 30px;
+  }
+  
+  .sidebarTopTitle {
+    font-size: 15px;
+    font-weight: 500;
+    color: gray;
+  }
+  
+  .sidebarTopIcon__option {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .sidebarBottom__option {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    padding: 10px;
+  }
+  
+  .noMessagesTitle {
+    color: gray;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .startConversationTitle {
+    color: gray;
+    font-size: 14px;
+    font-weight: 300;
+    margin-top: 50px;
+    text-align: center;
+  }
+  
+  .start__message:hover {
+    border-bottom: 1px solid lightgray;
+    cursor: pointer;
+  }
+  
+  .load__conversation:hover {
+    background-color: whitesmoke;
+    padding: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .messagingLeftSidebar__right {
+    flex: 0.7;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .messagingRight__top {
+    display: flex;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+    align-items: center;
+    height: 30px;
+    text-align: center;
+  }
+  
+  .newMessageTitle {
+    font-size: 15px;
+    font-weight: 500;
+    color: gray;
+  }
+  
+  .messagingRight__middle {
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+  }
+  
+  .messagingRight__bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .messagingRightBottom__top {
+    display: flex;
+    border-top: 1px solid lightgray;
+    padding-top: 10px;
+  }
+  
+  .messagingRightBottom__bottom {
+    display: flex;
+    margin-top: 15px;
+    border-top: 1px solid lightgray;
+  }
+  
+  .messagingRightBottomBottom__left {
+    display: flex;
+    margin-right: auto;
+    padding-top: 6px;
+  }
+  
+  .messagingRightBottomBottom__right {
+    display: flex;
+    margin-left: auto;
+    padding-top: 6px;
+    align-items: center;
+  }
+  
+  .promotionalImage {
+    height: 300px;
+    width: 300px;
+    cursor: pointer;
+  }
+  
+  .messageRight__bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    align-items: center;
+  }
+  
+  .messageRightBottom__option {
+    display: flex;
+    align-items: center;
+  }
+  
+  .optionTitle:hover {
+    cursor: pointer;
+    border-bottom: 1px solid lightgray;
+  }
+  

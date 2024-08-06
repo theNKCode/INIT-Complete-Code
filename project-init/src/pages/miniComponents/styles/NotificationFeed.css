@@ -1,0 +1,52 @@
+.notificationFeed {
+    display: flex;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+    position: relative;
+  }
+  
+  .notificationFeed__left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .notificationFeed__middle {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .notificationFeed__middle > p {
+    color: gray;
+  }
+  
+  .notificationFeed__middle > button {
+    align-self: flex-start;
+    margin-top: 10px;
+    background-color: white;
+    border: 1px solid #317fce;
+    border-radius: 30px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #317fce;
+    text-decoration: none;
+  }
+  
+  .notificationFeed__middle > button:hover {
+    border-width: 2px;
+    background-color: #e2f0fe;
+  }
+  
+  .notificationFeed__right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .notificationFeed__right > h1 {
+    font-size: 12px;
+    font-weight: 200;
+    margin: 0;
+  }
+  

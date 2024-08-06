@@ -1,0 +1,32 @@
+/* About.css */
+.footer {
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 1050px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .footer-divider {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 0;
+  }
+  
+  .footer-heading {
+    color: #ccc;
+    font-size: 2rem; /* 3xl size equivalent */
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+  }
+  
+  @media (min-width: 640px) {
+    .footer-heading {
+      justify-content: flex-start;
+    }
+  }
+  
